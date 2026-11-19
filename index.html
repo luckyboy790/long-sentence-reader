@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>长难句精读</title>
+<link rel="stylesheet" href="./assets/reader.css">
+</head>
+<body>
+<header class="phone-head">
+ <div class="reader-brand"><span class="brand-mark"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 5c3-1 6 0 9 2 3-2 6-3 9-2v13c-3-1-6 0-9 2-3-2-6-3-9-2zM12 7v13"/></svg></span>长难句精读</div>
+ <div class="head-links"><button class="learn-entry" data-open="hub"><svg aria-hidden="true" class="mobile-icon" viewBox="0 0 24 24"><path d="M4 5h10a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3V5zm0 11a3 3 0 0 1 3-3h10M20 8v11"/></svg>学习手册</button><button type="button" class="phone-btn catalog-icon" id="openCatalog" aria-controls="catalogSheet" aria-haspopup="dialog"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M3 6h.01M3 12h.01M3 18h.01"/></svg>选句目录</button></div>
+</header><div class="app">
+  <aside id="catalogBody">
+    <div class="brand">
+      <h1>长难句精读</h1>
+      <p>先抓主干，再逐层拆解修饰成分</p><div class="brand-actions"><button class="learn-entry" data-open="hub"><svg aria-hidden="true" class="mobile-icon" viewBox="0 0 24 24"><path d="M4 5h10a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3V5zm0 11a3 3 0 0 1 3-3h10M20 8v11"/></svg>学习手册</button><a class="learn-entry companion-link" href="https://www.bilibili.com/toy/daily-reading-calendar/index.html" target="_blank" rel="noopener noreferrer" aria-label="每日外刊精读（在新窗口打开）">每日外刊精读<svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M5 4h7v7"/></svg></a></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="progress-txt" id="progTxt"></div>
+    <div id="examTracks" role="group" aria-label="练习方向"><button type="button" data-track="考研">考研</button><button type="button" data-track="四级">四级</button><button type="button" data-track="六级">六级</button></div>
+    <div class="personal-entry"><button id="personalList">我的句库</button><button id="personalAdd">＋ 添加新句</button></div>
+    <div class="paper-filters"><label>类别<select id="paper"></select></label><label>年份<select id="year"></select></label></div><div class="paper-filters" id="editionRow"><label>月份与套卷<select id="edition"></select></label></div>
+    <div class="filter-wrap"><details id="filterDisclosure" open><summary class="only-phone" id="filterSummary">语法与掌握状态</summary><div class="filters" id="filters"></div></details></div>
+    <div class="matches" id="matches" aria-live="polite"></div>
+    <div class="list" id="list"></div>
+    <div class="side-foot">
+      <button id="darkBtn">🌙 深色模式</button>
+      <button id="resetBtn">↺ 重置进度</button>
+    </div>
+  </aside>
+
+  <div id="noMatches" class="empty" hidden>当前筛选没有匹配句子，请调整类别、年份或语法。</div><main>
+    <div class="only-phone phone-title"><div><h1 id="paperTitle"></h1><div class="paper-source" id="paperSource"></div></div>
+ <div class="folio" aria-label="当前句序号"><b id="folioNum"></b><span id="folioTotal"></span></div></div>
+ <div class="topbar">
+      <span class="badge" id="srcBadge"></span>
+      <div class="tags" id="tags"></div>
+      <span class="spacer"></span>
+      <div class="seg" id="modeSeg">
+        <button data-mode="steps" class="on">逐层拆解</button>
+        <button data-mode="trunk">只看主干</button>
+        <button data-mode="plain">纯净原句</button>
+      </div>
+      <button class="iconbtn" id="speakBtn" title="朗读 (S)">🔊 朗读</button>
+      <button class="iconbtn" id="doneBtn" title="标记掌握 (M)">☆ 标记掌握</button>
+    </div>
+
+    <div id="drawRibbon" hidden><span id="drawScope"></span><button id="endDraw">结束随机</button></div><section class="card reading-card">
+ <div class="only-phone reading-tools"><span class="reader-label">原创例句</span><div>
+ <button class="tool-icon" id="fontSizeBtn" aria-label="调整原句字号" title="调整原句字号">Aa</button>
+ <button class="tool-icon" id="mobileSpeak" aria-label="朗读原句" title="朗读原句"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zM16 8a6 6 0 0 1 0 8M19 5a10 10 0 0 1 0 14"/></svg></button></div></div>
+      <h3>原句 <span style="font-weight:400">· 点击标有解析的片段，查看讲解</span></h3>
+      <div id="personalTools" hidden><span id="analysisStatus"></span> <button class="text-act" id="runAI">AI 精读</button> <button class="text-act" id="editAnalysis">校订解析</button></div>
+      <div class="sentence" id="sentence" lang="en"></div><div class="cet-source"><a id="originalPaper" target="_blank" rel="noopener">查看原卷 ↗</a><span id="sharedNote"></span></div>
+      <div class="phone-guide only-phone" id="readingHint"></div><div class="legend">
+        <span><b style="border-bottom:3px solid var(--subj)"></b>主语</span>
+        <span><b style="border-bottom:3px double var(--pred)"></b>谓语</span>
+        <span><b style="border-bottom:2px dashed var(--ink)"></b>被修饰 / 关联的词</span>
+        <span><b style="border-bottom:2px solid var(--ink)"></b>结构核心词</span>
+      </div>
+    </section>
+
+    <div class="only-phone study-tabs" role="group" aria-label="学习内容">
+ <button data-panel="grammar">结构拆解</button><button data-panel="translation">动手翻译</button><button data-panel="phrases">重点词组</button></div>
+ <div class="grid">
+      <section class="card grammar-card">
+        <h3>结构拆解</h3>
+        <div class="core" id="core"></div>
+        <ol class="steps" id="steps" style="margin-top:12px"></ol>
+        <div class="stepnav">
+          <button id="prevStep">↑ 上一步</button>
+          <button id="expandBtn">展开全部</button>
+          <button id="nextStep" class="primary">下一步 ↓</button>
+        </div>
+      </section>
+
+      <div>
+        <section class="card translation-card">
+          <h3>先自己译一遍</h3>
+          <textarea id="myTrans" aria-label="我的译文" placeholder="在这里写下你的译文，自动保存在本机…"></textarea>
+          <button class="text-act" id="addTranslation" hidden>补充参考译文</button><div class="trans" id="trans">
+            <div class="txt" id="transTxt"></div>
+            <button class="reveal" id="revealBtn">对照参考译文 (T)</button>
+          </div>
+        </section>
+        <section class="card phrase-card">
+          <h3>重点词组</h3>
+          <p id="phraseCount" class="phrase-count"></p><ul class="phrases" id="phrases"></ul><div class="phrase-footer"><button class="text-act" data-open="pick">从原句选词</button><button class="text-act" data-open="vocab">查看词组本</button></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="pager">
+      <button id="prevS">← 上一句</button>
+      <button id="nextS">下一句 →</button>
+    </div>
+    <div class="kbd">
+      <kbd>←</kbd><kbd>→</kbd> 切换句子　<kbd>↑</kbd><kbd>↓</kbd> / <kbd>空格</kbd> 逐步拆解　<kbd>T</kbd> 译文　<kbd>M</kbd> 掌握　<kbd>S</kbd> 朗读　<kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 切换视图
+    </div>
+  </main>
+</div>
+ <nav class="phone-dock" id="phoneDock" aria-label="句子导航">
+ <button id="mobilePrev"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg>上一句</button><button id="mobileDone" aria-pressed="false"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></svg><span>标记掌握</span></button><button id="mobileNext" class="next">下一句<svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></svg></button></nav>
+ <dialog id="catalogSheet" class="phone-sheet" aria-labelledby="catalogHeading"><header class="sheet-top"><h2 id="catalogHeading">选句目录</h2><a class="learn-entry companion-link" href="https://www.bilibili.com/toy/daily-reading-calendar/index.html" target="_blank" rel="noopener noreferrer" aria-label="每日外刊精读（在新窗口打开）">每日外刊精读<svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8M5 4h7v7"/></svg></a><button class="sheet-x" aria-label="关闭目录" data-close="catalogSheet"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header></dialog>
+ <dialog id="studySheet" class="phone-sheet" aria-labelledby="studyHeading"><header class="sheet-top"><h2 id="studyHeading"></h2><button class="sheet-x" aria-label="关闭片段讲解" data-close="studySheet"><svg class="mobile-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+ <div class="sheet-reading"><blockquote id="piece" lang="en"></blockquote><div id="pieceNote"></div><p class="sheet-related" id="pieceAnchor"></p></div>
+ <div class="sheet-pager"><button id="pieceBack">上一处</button><span id="pieceCount"></span><button id="pieceNext">下一处</button></div></dialog>
+
+<dialog id="learningDialog" aria-labelledby="learnHeading">
+  <header class="learn-head"><h2 id="learnHeading"></h2><button id="learnClose" aria-label="关闭">×</button></header>
+  <nav id="learnTabs" aria-label="学习手册"></nav>
+  <div class="learn-content" id="learnContent"></div>
+</dialog>
+<script src="./assets/sentences.js" defer></script>
+<div id="personalToast" role="status" hidden></div>
+<script src="./assets/personal.js" defer></script>
+<script src="./assets/personal-ui.js" defer></script>
+<script src="./assets/ai-analysis.js" defer></script>
+<script src="./assets/reader.js" defer></script>
+</body>
+</html>
